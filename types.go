@@ -77,6 +77,11 @@ type Image struct {
 	TaskUUID     string `json:"taskUUID"`
 }
 
+type Text struct {
+	TaskUUID string `json:"taskUUID"`
+	Text     string `json:"text"`
+}
+
 type Lora struct {
 	ModelID string  `json:"modelId"`
 	Weight  float64 `json:"weight"`

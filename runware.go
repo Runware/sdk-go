@@ -23,7 +23,7 @@ const (
 const (
 	pongWait            = 5 * time.Second
 	pingInterval        = (pongWait * 9) / 10
-	timeoutSendResponse = 15 // In sec
+	timeoutSendResponse = 30 // In sec
 )
 
 type Runware interface {

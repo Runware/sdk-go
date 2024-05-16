@@ -68,13 +68,31 @@ req := runware.NewTaskReq{
     ControlNet:         nil,
 }
 ```
+## Advanced settings 
+
+### Context adjustments
+
+By default, all tasks have a 30-second timeout, but sometimes you might want a fast expiry. This can be passed via context
+
+```go
+ctx := context.Background()
+ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
+defer cancel()
+
+imagesRes, err := sdk.NewImage(ctx, picfinder.NewTaskReq{
+    PromptText:    "Some prompt text",
+    NumberResults: 1,
+})
+```
+to close this request after 5 seconds.
+
+
+### Custom UUID for Requests
+
+If at some point you need to group your execution your self and you need to do something with them based 
+on your business needs you can pass your own UUID v4 to any sdk request via `TaskUUID`
 
 ## Roadmap
 
 - Add custom handler support for API events
-- Implement SDK support for ControlNets 
-- Implement SDK support for Image upscaling
-- Implement SDK support for Image upload
-- Implement SDK support for Image interrogator
-- Implement SDK support for Prompt enhancer
 
