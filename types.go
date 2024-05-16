@@ -2,17 +2,17 @@ package runware
 
 // Task types
 const (
-	TextToImage = iota + 1 // Start iota at 1 to match your values
-	ImageToImage
-	Inpainting
-	ImageToText
-	PromptEnhancer
-	ImageUpscale
-	ImageUpload
-	RemoveBackground
-	ControlNetTextToImage
-	ControlNetImageToImage
-	ControlNetPreprocessImage
+	TextToImage               = 1
+	ImageToImage              = 2
+	Inpainting                = 3
+	ImageToText               = 4
+	PromptEnhancer            = 5
+	ImageUpscale              = 6
+	ImageUpload               = 7
+	RemoveBackground          = 8
+	ControlNetTextToImage     = 9
+	ControlNetImageToImage    = 10
+	ControlNetPreprocessImage = 11
 )
 
 // Available models
@@ -24,6 +24,22 @@ const (
 	ModelDreamshaper        = 20
 	ModelGhostmixBakedvae   = 22
 	ModelSamaritan3DCartoon = 25
+)
+
+// Available processors
+const (
+	ProcessorCanny        = "canny"
+	ProcessorDepth        = "depth"
+	ProcessorMlsd         = "mlsd"
+	ProcessorNormalbae    = "normalbae"
+	ProcessorOpenpose     = "openpose"
+	ProcessorTile         = "tile"
+	ProcessorSeg          = "seg"
+	ProcessorLineart      = "lineart"
+	ProcessorLineartAnime = "lineart_anime"
+	ProcessorShuffle      = "shuffle"
+	ProcessorScribble     = "scribble"
+	ProcessorSoftedge     = "softedge"
 )
 
 // Available sizes
@@ -44,11 +60,6 @@ const (
 	SizeLandscape3to2SDXL  = 21
 )
 
-type Lora struct {
-	ModelID string  `json:"modelId"`
-	Weight  float64 `json:"weight"`
-}
-
 type ControlNet struct {
 	Preprocessor   string  `json:"preprocessor"`
 	Weight         float64 `json:"weight"`
@@ -56,6 +67,30 @@ type ControlNet struct {
 	EndStep        int     `json:"endStep"`
 	GuideImageUUID string  `json:"guideImageUUID"`
 	ControlMode    string  `json:"controlMode"`
+}
+
+type Image struct {
+	ImageSrc     string `json:"imageSrc"`
+	ImageUUID    string `json:"imageUUID"`
+	BNSFWContent bool   `json:"bNSFWContent"`
+	ImageAltText string `json:"imageAltText"`
+	TaskUUID     string `json:"taskUUID"`
+}
+
+type Lora struct {
+	ModelID string  `json:"modelId"`
+	Weight  float64 `json:"weight"`
+}
+
+type PreProcessControlNet struct {
+	TaskUUID           string `json:"taskUUID"`
+	PreProcessorType   string `json:"preProcessorType"`
+	GuideImageUUID     string `json:"guideImageUUID"`
+	TaskType           int    `json:"taskType"`
+	Width              int    `json:"width"`
+	Height             int    `json:"height"`
+	LowThresholdCanny  int    `json:"lowThresholdCanny"`
+	HighThresholdCanny int    `json:"highThresholdCanny"`
 }
 
 type Task struct {
@@ -70,12 +105,4 @@ type Task struct {
 	Offset             int          `json:"offset"`
 	Lora               []Lora       `json:"lora"`
 	ControlNet         []ControlNet `json:"controlNet"`
-}
-
-type Image struct {
-	ImageSrc     string `json:"imageSrc"`
-	ImageUUID    string `json:"imageUUID"`
-	BNSFWContent bool   `json:"bNSFWContent"`
-	ImageAltText string `json:"imageAltText"`
-	TaskUUID     string `json:"taskUUID"`
 }

@@ -17,35 +17,8 @@ const (
 	NewImageUpload           = "newImageUpload"
 	NewReverseImageClip      = "newReverseImageClip"
 	NewPromptEnhance         = "newPromptEnhance"
+	Pong                     = "pong"
 )
-
-var incomingEvents = []string{
-	NewConnectionSessionUUID,
-	NewImage,
-	NewUpscaleGan,
-	NewUploadedImageUUID,
-	NewReverseClip,
-	NewPromptEnhancer,
-}
-
-func incomingEventExist(key string) bool {
-	for _, messageType := range incomingEvents {
-		if messageType == key {
-			return true
-		}
-	}
-	return false
-}
-
-func incomingIsError(key string) bool {
-	errFields := []string{"error", " errorId", "errorMessage", "errorMessageContentId"}
-	for _, errField := range errFields {
-		if errField == key {
-			return true
-		}
-	}
-	return false
-}
 
 func MergeEventRequestsWithDefaults[T any](cfgDest, defaultCfgDest T) error {
 	dstVal := reflect.ValueOf(cfgDest).Elem()
