@@ -63,6 +63,32 @@ func main() {
 		}
 	}
 	jsonPrint(res)
+	
+	log.Println("Image to Text")
+	imgToText, err := sdk.ImageToText(context.Background(), picfinder.NewReverseImageClipReq{
+		ImageUUID: res.NewImageUUID,
+	})
+	
+	if err != nil {
+		if !errors.Is(err, picfinder.ErrRequestTimeout) {
+			panic(err)
+		}
+	}
+	jsonPrint(imgToText)
+	
+	log.Println("Prompt enhance")
+	promptEnhance, err := sdk.PromptEnhancer(context.Background(), picfinder.NewPromptEnhanceReq{
+		PromptText:      imgToText.Texts[0].Text,
+		PromptMaxLength: 250,
+	})
+	
+	if err != nil {
+		if !errors.Is(err, picfinder.ErrRequestTimeout) {
+			panic(err)
+		}
+	}
+	jsonPrint(promptEnhance)
+	
 }
 
 func jsonPrint(data any) {

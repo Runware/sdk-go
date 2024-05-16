@@ -79,8 +79,6 @@ func main() {
 	}
 	
 	jsonPrint(upscaleRes)
-	
-	select {}
 }
 
 func jsonPrint(data any) {
