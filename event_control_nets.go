@@ -118,7 +118,7 @@ func mergeControlNetsReqWithDefaults(req *NewControlNetsReq) *NewControlNetsReq 
 
 func validateNewControlNetsReq(req NewControlNetsReq) error {
 	if req.GuideImageUUID == "" {
-		return fmt.Errorf("%w:[%s]", ErrGuidImageRequired, NewPreProcessControlNet)
+		return fmt.Errorf("%w:[%s]", ErrFieldRequired, "guideImageUUID")
 	}
 	return nil
 }
