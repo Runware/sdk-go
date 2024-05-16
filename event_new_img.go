@@ -104,7 +104,7 @@ func (sdk *SDK) NewImage(ctx context.Context, req NewTaskReq) (*NewTaskResp, err
 		return resp, nil
 	case err = <-errChan:
 		return nil, err
-	case <-time.After(15 * time.Second):
+	case <-time.After(timeoutSendResponse * time.Second):
 		newTaskResp.TimedOut = true
 		return newTaskResp, fmt.Errorf("%w:[%s]", ErrRequestTimeout, newTaskReq.Event)
 	case <-ctx.Done():
@@ -149,7 +149,7 @@ func mergeNewTaskReqWithDefaults(req *NewTaskReq) *NewTaskReq {
 
 func validateNewTaskReq(req NewTaskReq) error {
 	if req.PromptText == "" {
-		return fmt.Errorf("%w:[%s]", ErrPromptRequired, NewTask)
+		return fmt.Errorf("%w:[%s]", ErrFieldRequired, "promptText")
 	}
 	
 	return nil
