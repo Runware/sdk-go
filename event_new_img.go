@@ -20,10 +20,16 @@ type NewTaskResp struct {
 }
 
 func (sdk *SDK) NewImage(ctx context.Context, req NewTaskReq) (*NewTaskResp, error) {
-	req = *mergeNewTaskReqWithDefaults(&req)
 	if err := validateNewTaskReq(req); err != nil {
 		return nil, err
 	}
+	
+	// In case `req.TaskType` is empty try to evaluate it
+	if req.TaskType == 0 {
+		req.TaskType = getTaskType(req.PromptText, req.ControlNet, "", req.ImageInitiatorUUID)
+	}
+	
+	req = *mergeNewTaskReqWithDefaults(&req)
 	
 	newTaskReq := Request{
 		ID:            uuid.New().String(),
@@ -113,6 +119,8 @@ func (sdk *SDK) NewImage(ctx context.Context, req NewTaskReq) (*NewTaskResp, err
 	
 }
 
+// NewTaskReqDefaults set requests defaults
+// TODO: Add task type determination function helper
 func NewTaskReqDefaults() *NewTaskReq {
 	return &NewTaskReq{
 		TaskUUID:      uuid.New().String(),
@@ -153,4 +161,28 @@ func validateNewTaskReq(req NewTaskReq) error {
 	}
 	
 	return nil
+}
+
+func getTaskType(promptText string, controlNet []ControlNet, imageMaskUUID, imageInitiatorUUID string) int {
+	hasPrompt := promptText != ""
+	hasControlNet := len(controlNet) > 0
+	hasMask := imageMaskUUID != ""
+	hasInitiator := imageInitiatorUUID != ""
+	
+	switch {
+	case hasPrompt && !hasControlNet && !hasMask && !hasInitiator:
+		return TextToImage
+	case hasPrompt && !hasControlNet && !hasMask && hasInitiator:
+		return ImageToImage
+	case hasPrompt && !hasControlNet && hasMask && hasInitiator:
+		return Inpainting
+	case hasPrompt && hasControlNet && !hasMask && !hasInitiator:
+		return ControlNetTextToImage
+	case hasPrompt && hasControlNet && !hasMask && hasInitiator:
+		return ControlNetImageToImage
+	case hasPrompt && hasControlNet && hasMask && hasInitiator:
+		return ControlNetPreprocessImage
+	default:
+		return 0
+	}
 }
