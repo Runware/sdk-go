@@ -64,7 +64,10 @@ func (sdk *SDK) OnError(msg map[string]interface{}) (error, bool) {
 		}
 	}
 	
-	return fmt.Errorf("%w:[%v:%s]", err, msg["errorId"], msg["errorMessage"]), hasError
+	if hasError {
+		return fmt.Errorf("%w:[%v:%s]", err, msg["errorId"], msg["errorMessage"]), hasError
+	}
+	return nil, false
 }
 
 func (sdk *SDK) onReconnected() {
