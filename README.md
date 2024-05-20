@@ -24,19 +24,15 @@ import (
 
 
 func main() {
-    runwareCli, err := runware.New(picfinder.Config{
-        APIKey: os.Getenv("RUNWARE_API"),
+    sdk, err := runware.NewSDK(picfinder.SDKConfig{
+        APIKey:    os.Getenv("RUNWARE_API"),
+        KeepAlive: true,
     })
     if err != nil {
         panic(err)
     }
-    
-    sdk, err := runware.NewSDK(runwareCli)
-    if err != nil {
-        panic(err)
-    }
 
-    imagesRes, err := sdk.NewImage(ctx, picfinder.NewTaskReq{
+    imagesRes, err := sdk.NewImage(ctx, runware.NewTaskReq{
         PromptText:    "Prompt text",
         NumberResults: 12,
     })
