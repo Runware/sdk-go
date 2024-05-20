@@ -28,7 +28,7 @@ func main() {
 	log.Println("Text to Image")
 	imagesRes, err := sdk.NewImage(ctx, picfinder.NewTaskReq{
 		PromptText:    "neon punk retro futuristic 1970 fallout game vibes like theme rocky deserted villages outside the cities. Air looks dusty un unclean with a tint of red. Debris and rusty cars here and there set the scene",
-		NumberResults: 12,
+		NumberResults: 2,
 	})
 	if err != nil {
 		if !errors.Is(err, picfinder.ErrRequestTimeout) {
@@ -41,7 +41,8 @@ func main() {
 	workImage := imagesRes.Images[0]
 	log.Println("Image to Image image: UUID", workImage.ImageUUID)
 	imagesRes, err = sdk.NewImage(ctx, picfinder.NewTaskReq{
-		PromptText:         "neon punk retro futuristic 1970 fallout game vibes like theme rocky deserted villages outside the cities. Air looks dusty un unclean with a tint of red. Debris and rusty cars here and there set the scene",
+		TaskType:           picfinder.ImageToImage,
+		PromptText:         "fallout game vibes like theme rocky deserted villages outside the cities. Air looks dusty un unclean with a tint of red. Debris and rusty cars here and there set the scene",
 		NumberResults:      12,
 		ImageInitiatorUUID: workImage.ImageUUID,
 	})
