@@ -108,7 +108,7 @@ func makeClient(cfg SDKConfig) (Runware, error) {
 	client, err := New(RunwareConfig{
 		APIKey:    cfg.APIKey,
 		ConnAddr:  cfg.ConnAddr,
-		KeepAlive: false,
+		KeepAlive: cfg.KeepAlive,
 	})
 	if err != nil {
 		return nil, err
